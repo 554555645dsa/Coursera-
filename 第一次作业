@@ -1,0 +1,14 @@
+gradientDescent.m   gradientDescentMulti.m  ：(由于和theta的维度没有关系，所以对于单变量和多变量的指令是完全一样的)
+theta = theta - alpha / m * (X' * (X * theta - y))
+
+computeCost.m    computeCostMulti.m   :
+err = (X*theta-y).^2;
+J=1/(2*m)*sum(err);
+
+featureNormalize.m    :(sigma可以是标注差也可以是数据范围，也就是最大值减最小值，这次要求用标准差)
+mu = mean(X,1);
+sigma = std(X,1);
+X_norm = (X - mu) ./ sigma
+
+normalEqn.m  ：(照着抄计算公式)
+theta = pinv(X' * X) * X' * y
