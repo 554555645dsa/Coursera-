@@ -1,0 +1,31 @@
+ plotData.m ：find返回的是序号（从1开始）
+ 
+pos = find(y == 1);
+neg = find(y == 0);
+plot(X(pos , 1) , X(pos , 2),'k+', 'LineWidth', 2, 'MarkerSize', 7);
+plot(X(neg , 1) , X(neg , 2),'ko', 'MarkerFaceColor', 'y', 'MarkerSize', 7);
+
+ sigmoid.m ：
+ 
+ g = 1 ./ (1 + exp(-z));
+ 
+costFunction.m ：（J按照公式抄上去  grad的向量化和线性回归中求法和原理一致）
+ 
+h = sigmoid(X * theta);
+J = 1 / m *(- (y' * log(h)) - ((1 - y)' * log(1 - h)));
+grad = 1 / m * (X' * (h - y));
+
+predict.m ：
+
+threshold = 0.5;
+pro= sigmoid(X * theta);
+pro(pro >= threshold) = 1;   #把所有大于threshold的数变为1
+pro(pro < threshold) = 0;    #同理
+p = pro;
+
+costFunctionReg.m ： （把theta的第一个元素换为0，在计算过程中就不造成影响）
+
+h = sigmoid(X * theta);
+chantheta = [0;theta(2:length(theta),1)];
+J = 1 / m *(- (y' * log(h)) - ((1 - y)' * log(1 - h))) + lambda / 2 / m * sum (chantheta .^2);
+grad = 1 / m * (X' * (h - y)) + lambda / m * chantheta;
