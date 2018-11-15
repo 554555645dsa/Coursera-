@@ -1,0 +1,37 @@
+lrCostFunction.m ：（这个就是把上一次的sigmoid函数和计算costfunction写在一个文件里面）
+
+z = X * theta;
+h = 1 ./ (1 + exp(-z));
+chantheta = [0;theta(2:length(theta),1)];
+J = 1 / m *(- (y' * log(h)) - ((1 - y)' * log(1 - h))) + lambda / 2 / m * sum (chantheta .^2);
+grad = 1 / m * (X' * (h - y)) + lambda / m * chantheta;
+
+oneVsAll.m：（在一个循环中重复和之前的ex2文件中类似的调用函数部分，然后给all_theta赋值就好了）
+
+for c = 1:num_labels
+     % Set Initial theta
+     initial_theta = zeros(n + 1, 1);
+     
+     % Set options for fminunc
+     options = optimset('GradObj', 'on', 'MaxIter',50);
+ 
+     % Run fmincg to obtain the optimal theta
+     % This function will return theta and the cost 
+     [theta] =fmincg (@(t)(lrCostFunction(t, X, (y == c), lambda)),initial_theta, options);
+     all_theta(c,:) = theta';
+end
+
+predictOneVsAll.m ：（查看max函数的帮助，[a,b] = max（……）这种用法，b就是序列号了，其他的完全按照作业里的pdf的证明）
+
+A = X * all_theta';    
+[pn, p] = max(A,[],2);
+
+predict.m:（重复之前的计算过程两次就好了。关于向量是谁乘谁，直接看所有参数矩阵的维度，只要几个数字都不一样，能得到最后结果的计算步骤是惟一的）
+
+X = [ones(m, 1) X];
+z = X * Theta1';
+a = 1 ./ (1 + exp(-z));
+a = [ones(m, 1) a];
+t = a * Theta2';
+o = 1 ./ (1 + exp(-t));
+[nu, p] = max(o, [], 2);
