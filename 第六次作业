@@ -1,0 +1,32 @@
+ gaussianKernel.m：
+ sim = exp(-(sum((x1-x2).^2))./(2*sigma*sigma));
+ 
+ dataset3Params.m：//没有什么好办法，就是把所有的值带入计算一遍
+ c1 = [0.01;0.03;0.1;0.3;1;3;10;30];
+sigma1 = [0.01;0.03;0.1;0.3;1;3;10;30];
+error = 1;
+for i=1:length(c1)
+  for j = 1:length(sigma1)
+    model = svmTrain(X, y, c1(i), @(x1, x2) gaussianKernel(x1, x2, sigma1(j)));
+    predictions = svmPredict(model, Xval);
+    error_pre = mean(double(predictions ~= yval));
+    if error_pre < error
+      error = error_pre;
+      C = c1(i);
+      sigma = sigma1(j);
+    end
+  end
+end
+
+processEmail.m：
+    for i = 1:length(vocabList)
+      if strcmp(str,vocabList{i})
+        word_indices = [word_indices ; i];
+      end
+    end
+    
+emailFeatures.m
+
+for i =1:length(word_indices)
+  x(word_indices(i)) = 1;
+end
