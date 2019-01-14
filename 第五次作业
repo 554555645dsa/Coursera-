@@ -1,0 +1,26 @@
+linearRegCostFunction.m：
+h = X * theta;
+chantheta = theta;
+chantheta(1) = 0;
+J = 1 ./ (2*m) * sum((h-y).^2) + lambda * sum(chantheta.^2) / (2*m);
+grad = 1/m*(X' * (h-y)) +lambda /m * chantheta;
+
+learningCurve.m：
+       for i = 1:m
+            XX = X(1:i,:);
+            yy = y(1:i);
+            [thetaa] = trainLinearReg(XX, yy, lambda);
+            error_train(i) = linearRegCostFunction(XX,yy,thetaa,0);
+            error_val(i) = linearRegCostFunction(Xval,yval,thetaa,0);
+
+           
+       end
+ 
+ validationCurve.m：
+       for i = 1:length(lambda_vec)
+           lambda = lambda_vec(i);
+           [thetaa] = trainLinearReg(X, y, lambda);
+           error_train(i) = linearRegCostFunction(X,y,thetaa,0);
+           error_val(i) = linearRegCostFunction(Xval,yval,thetaa,0);
+           
+       end
